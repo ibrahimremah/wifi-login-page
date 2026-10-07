@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7fa">
+  <meta name="theme-color" content="#101923">
   <title>Corporate Wireless | Cisco</title>
   <style>
     :root {
@@ -217,6 +217,71 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
     }
+    :root {
+      color-scheme: light;
+      --ink: #263746;
+      --muted: #617482;
+      --soft: #82929e;
+      --line: #d9e0e5;
+      --paper: #e9edef;
+      --canvas: #dce1e5;
+      --red-pale: #fff0f2;
+      --blue-pale: #edf7fa;
+      --green-pale: #eef8f1;
+      --shadow: 0 18px 55px rgb(42 60 74 / 13%), 0 2px 8px rgb(42 60 74 / 7%);
+    }
+    body { background: radial-gradient(ellipse at 50% 43%, #e8ebee 0%, #d4dade 75%); }
+    .brand-watermark { color: #087ca8; opacity: .32; }
+    .brand-caption, .field label, .check-row, .page-footer button, .topbar-right,
+    .top-link, .brand-product, .crumb button { color: #475c6a; }
+    .card, .security-card, .panel, .summary-card { border-color: #cbd3d9; background: #e9edef; }
+    .login-card { background: rgb(228 233 237 / 40%); }
+    .field input, .filters input, .filters select { border-color: #cbd6de; color: #263746; background-color: rgb(255 255 255 / 14%); }
+    #username, #email, #password { color: #000; }
+    #username::placeholder, #email::placeholder, #password::placeholder { color: #000; opacity: 1; }
+    .field input::placeholder, .filters input::placeholder { color: #81919c; }
+    .field input:focus, .filters input:focus, .filters select:focus { border-color: #78aabe; box-shadow: 0 0 0 3px rgb(8 124 168 / 12%); }
+    .toggle-password { color: #637987; }
+    .toggle-password:hover { color: #263746; }
+    .security-card { border-color: #dfcdd0; background: linear-gradient(151deg, #eeebec 0%, #e9e1e3 100%); }
+    .warning-icon { border-color: #ecdadd; background: #fff; }
+    .security-card p { color: #596c79; }
+    .security-card .monitoring { border-color: #eadde0; color: #798794; }
+    .integration { border-color: #cfd9df; color: #526875; background: #e7ecef; }
+    .integration strong { color: #334c5b; }
+    .preview { color: #758692; }
+    .preview button { border-color: #d8e0e5; color: #536977; }
+    .preview button:hover { border-color: #b9c5cd; color: #263746; background: #e9edef; }
+    .page-footer { color: #7b8a95; }
+    .status-loading { border-color: #cfe1e8; color: #386778; background: #eef8fb; }
+    .status-success { border-color: #cfe4d6; color: #19734a; background: #eff8f2; }
+    .status-failed { border-color: #ecd0d5; color: #a80d26; background: #fff2f3; }
+    .connected-icon { border-color: #cfe4d6; }
+    .connected-card h1 { color: #19734a; }
+    .connection-detail { border-color: #d5e6da; color: #517362; background: #f3faf5; }
+    .admin-topbar { border-color: #cbd3d9; background: #e9edef; }
+    .crumb, .date-note, .summary-label, .summary-foot, .panel-heading p,
+    .panel-heading h2, th, .table-footer, .admin-note { color: #70818d; }
+    .summary-icon { color: #477288; background: #eff6f9; }
+    .summary-icon.red { color: #c8102e; background: #fff1f3; }
+    .summary-icon.green { color: #19734a; background: #eef8f2; }
+    .summary-icon.amber { color: #a76517; background: #fff7e9; }
+    .filters { border-color: #cdd5db; background: #e5eaed; }
+    .filters input, .filters select, .secondary, .filter-button { border-color: #c5cfd6; color: #435968; background-color: #e9edef; }
+    .filter-button:hover, .secondary:hover { border-color: #b6c2ca; color: #263746; background: #dce2e6; }
+    th { background: #e2e7ea; }
+    th, td, .table-footer { border-color: #d3dade; }
+    td { color: #495e6d; }
+    .user-name { color: #31495a; }
+    .email-cell, .session-code { color: #768793; }
+    tbody tr:hover { background: #e3e8eb; }
+    .overview-action { border-color: #cdd5db; background: #e3e8eb; }
+    .overview-action p { color: #758590; }
+    .overview-action .secondary { color: #c8102e; border-color: #eed1d6; }
+    .admin-info { border-color: #cbd4da; color: #657783; background: #e4e9ec; }
+    .modal { border-color: #e0e6ea; background: #fff; }
+    .modal p { color: #627586; }
+    .toast { border-color: #d5e5da; color: #226746; background: #fff; }
   </style>
 </head>
 <body>
@@ -229,7 +294,7 @@
         <rect x="168" y="1" width="7" height="47" rx="3.5"/><rect x="193" y="7" width="7" height="38" rx="3.5"/>
         <rect x="218" y="16" width="7" height="27" rx="3.5"/>
       </g>
-      <text x="120" y="99" text-anchor="middle" font-family="Arial, sans-serif" font-size="39" font-weight="700" letter-spacing="7">cisco</text>
+      <text x="120" y="99" text-anchor="middle" font-family="Arial, sans-serif" font-size="39" font-weight="700" letter-spacing="7">CISCO</text>
     </svg>
   </div>
   <main id="login-screen" class="screen active">
@@ -243,7 +308,7 @@
             <rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/>
             <rect x="107" y="8" width="4" height="15" rx="2"/>
           </g>
-          <text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+          <text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">CISCO</text>
         </svg>
         <div class="brand-caption">Corporate Wireless Network</div>
       </header>
@@ -319,7 +384,7 @@
         <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
           <g fill="currentColor">
             <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
-          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">CISCO</text>
         </svg>
         <div class="brand-caption">Corporate Wireless Network</div>
       </header>
@@ -342,7 +407,7 @@
         <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
           <g fill="currentColor">
             <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
-          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">CISCO</text>
         </svg>
         <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
       </div>
@@ -372,7 +437,7 @@
         <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
           <g fill="currentColor">
             <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
-          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">CISCO</text>
         </svg>
         <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
       </div>
@@ -415,7 +480,7 @@
         <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
           <g fill="currentColor">
             <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
-          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">CISCO</text>
         </svg>
         <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
       </div>
