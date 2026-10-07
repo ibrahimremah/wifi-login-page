@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fa">
+  <title>Corporate Wireless | Cisco</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172b3a;
+      --muted: #627586;
+      --soft: #8494a2;
+      --line: #e3e9ee;
+      --paper: #fff;
+      --canvas: #f4f7f9;
+      --red: #c8102e;
+      --red-dark: #a80d26;
+      --red-pale: #fff2f3;
+      --blue: #087ca8;
+      --blue-pale: #eef8fb;
+      --green: #19734a;
+      --green-pale: #eff8f2;
+      --shadow: 0 18px 55px rgb(29 48 63 / 8%), 0 2px 8px rgb(29 48 63 / 4%);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--ink); background: var(--canvas); }
+    .brand-watermark { position: fixed; z-index: 0; inset: 0; display: grid; place-items: center; overflow: hidden; color: #066489; opacity: .12; pointer-events: none; }
+    .brand-watermark svg { width: min(540px, 82vw); height: auto; }
+    body > main { position: relative; z-index: 1; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+    .login-shell { min-height: 100vh; padding: 40px 24px 28px; }
+    .brand { display: grid; justify-items: center; gap: 8px; margin: 0 auto 28px; }
+    .brand-mark { width: 112px; height: 50px; color: var(--red); }
+    .brand-caption { font-size: 13px; font-weight: 600; letter-spacing: .055em; color: #596d7c; }
+    .login-layout { display: grid; grid-template-columns: minmax(0, 460px) minmax(240px, 320px); gap: 24px; align-items: stretch; justify-content: center; }
+    .card, .security-card, .panel, .summary-card { background: var(--paper); border: 1px solid #e8edf1; border-radius: 16px; box-shadow: var(--shadow); }
+    .login-card { padding: 36px 38px 30px; background: rgb(255 255 255 / 15%); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--red); font-size: 11px; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+    h1, h2, h3, p { margin-top: 0; }
+    .login-card h1 { margin: 15px 0 8px; font-size: clamp(25px, 3vw, 30px); line-height: 1.2; letter-spacing: -.045em; }
+    .subtitle { margin: 0 0 26px; color: var(--muted); font-size: 14px; line-height: 1.65; }
+    .field { margin-bottom: 17px; }
+    .field label { display: block; margin-bottom: 7px; color: #304556; font-size: 13px; font-weight: 650; }
+    .input-wrap { position: relative; }
+    .field input { width: 100%; min-height: 46px; padding: 0 13px; border: 1px solid #d7e0e7; border-radius: 8px; outline: none; color: var(--ink); background: transparent; font-size: 13px; transition: border-color .16s, box-shadow .16s; }
+    .field input::placeholder { color: #9ba8b2; }
+    .field input:focus { border-color: #aebdca; box-shadow: 0 0 0 3px rgb(8 124 168 / 10%); }
+    .password-input { padding-right: 48px !important; }
+    .toggle-password { position: absolute; top: 0; right: 0; display: grid; width: 46px; height: 46px; place-items: center; border: 0; border-radius: 0 8px 8px 0; color: #718290; background: transparent; }
+    .toggle-password:hover { color: var(--ink); }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin: 6px 0 20px; color: #526676; font-size: 12px; line-height: 1.6; cursor: pointer; }
+    .check-row input { width: 16px; height: 16px; flex: 0 0 16px; margin: 2px 0 0; accent-color: var(--red); }
+    .primary, .secondary, .ghost, .filter-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; padding: 0 17px; border: 1px solid transparent; border-radius: 8px; font-size: 13px; font-weight: 700; transition: background .16s, border-color .16s, transform .16s; }
+    .primary { width: 100%; color: white; background: var(--red); box-shadow: 0 4px 10px rgb(200 16 46 / 15%); }
+    .primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+    .primary:disabled { opacity: .8; cursor: wait; transform: none; }
+    .help { margin: 18px 0 0; text-align: center; color: var(--muted); font-size: 12px; }
+    .help a { color: var(--red); font-weight: 650; text-decoration: none; }
+    .help a:hover { text-decoration: underline; }
+    .security-card { position: relative; overflow: hidden; align-self: center; padding: 25px 23px 22px; border-color: #f0d9dd; background: linear-gradient(151deg, #fff 0%, #fff7f7 100%); }
+    .security-card::before { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--red); content: ""; }
+    .warning-heading { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; color: var(--red); }
+    .warning-icon { display: grid; width: 34px; height: 34px; flex: 0 0 34px; place-items: center; border: 1px solid #f3d4d9; border-radius: 10px; background: #fff; }
+    .warning-heading strong { font-size: 12px; letter-spacing: .045em; }
+    .security-card p { margin: 0 0 11px; color: #596c79; font-size: 12px; line-height: 1.72; }
+    .security-card .monitoring { margin: 13px 0 0; padding-top: 13px; border-top: 1px solid #f0dfe2; color: #798794; font-size: 11px; }
+    .integration { display: flex; align-items: flex-start; gap: 10px; margin: 20px auto 0; padding: 13px 15px; max-width: 804px; border: 1px solid #e1ebef; border-radius: 10px; color: #58707d; background: #f9fbfc; font-size: 11px; line-height: 1.55; }
+    .integration svg { flex: 0 0 16px; margin-top: 1px; color: var(--blue); }
+    .integration strong { color: #334c5b; }
+    .preview { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; margin: 13px auto 0; color: #82909b; font-size: 10px; }
+    .preview button { padding: 4px 8px; border: 1px solid #e1e7ec; border-radius: 20px; color: #697985; background: transparent; font-size: 10px; }
+    .preview button:hover { border-color: #cfd9e0; color: var(--ink); background: white; }
+    .page-footer { margin: 21px auto 0; text-align: center; color: #929eaa; font-size: 10px; }
+    .page-footer button { margin-left: 10px; padding: 0; border: 0; color: #70818d; background: transparent; font-size: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    .status-box { display: flex; gap: 11px; align-items: flex-start; margin: 0 0 17px; padding: 12px 13px; border-radius: 9px; font-size: 12px; line-height: 1.6; }
+    .status-box strong { display: block; margin-bottom: 2px; }
+    .status-box svg { width: 17px; flex: 0 0 17px; margin-top: 1px; }
+    .status-loading { border: 1px solid #d7eaf1; color: #386778; background: var(--blue-pale); }
+    .status-success { border: 1px solid #cfe7d8; color: var(--green); background: var(--green-pale); }
+    .status-failed { border: 1px solid #f0d2d7; color: var(--red-dark); background: var(--red-pale); }
+    .connected-shell { display: grid; min-height: 100vh; align-content: center; justify-items: center; padding: 35px 18px; }
+    .connected-card { width: min(100%, 490px); padding: 37px 32px 31px; text-align: center; }
+    .connected-icon { display: grid; width: 62px; height: 62px; margin: 0 auto 19px; place-items: center; border: 1px solid #cfe7d8; border-radius: 50%; color: var(--green); background: var(--green-pale); }
+    .connected-card h1 { margin: 0 0 10px; color: var(--green); font-size: clamp(25px, 5vw, 32px); letter-spacing: -.045em; }
+    .connected-card .subtitle { margin: 0 auto 23px; max-width: 350px; }
+    .connection-detail { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 23px; padding: 12px; border: 1px solid #e4eee7; border-radius: 9px; color: #517362; background: #f7fbf8; font-size: 12px; }
+    .hidden { display: none !important; }
+
+    .admin-shell { min-height: 100vh; }
+    .admin-topbar { display: flex; min-height: 66px; align-items: center; justify-content: space-between; gap: 18px; padding: 0 clamp(18px, 4vw, 54px); border-bottom: 1px solid #e7ecf0; background: white; }
+    .admin-brand { display: flex; align-items: center; gap: 13px; }
+    .admin-brand .brand-mark { width: 76px; height: 36px; }
+    .brand-divider { width: 1px; height: 25px; background: var(--line); }
+    .brand-product { color: #566c7b; font-size: 12px; font-weight: 650; }
+    .topbar-right { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 11px; }
+    .admin-dot { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #28a569; }
+    .top-link { padding: 7px 0; border: 0; color: #657683; background: transparent; font-size: 11px; }
+    .top-link:hover { color: var(--red); }
+    .dashboard { max-width: 1280px; margin: auto; padding: 34px clamp(18px, 4vw, 52px) 52px; }
+    .crumb { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; color: #82919d; font-size: 11px; }
+    .crumb button { padding: 0; border: 0; color: #71828f; background: none; font-size: inherit; }
+    .crumb button:hover { color: var(--red); }
+    .page-title-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+    .page-title-row h1 { margin: 0 0 6px; font-size: 26px; letter-spacing: -.04em; }
+    .page-title-row p { margin: 0; color: var(--muted); font-size: 12px; }
+    .date-note { color: #768792; font-size: 11px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15px; margin-bottom: 24px; }
+    .summary-card { padding: 17px 18px; box-shadow: 0 2px 10px rgb(28 48 63 / 3%); }
+    .summary-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .summary-label { color: #6e7f8b; font-size: 11px; font-weight: 550; }
+    .summary-icon { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 9px; color: #477288; background: #eff6f9; }
+    .summary-icon.red { color: var(--red); background: #fff1f3; }
+    .summary-icon.green { color: var(--green); background: #eef8f2; }
+    .summary-icon.amber { color: #a76517; background: #fff7e9; }
+    .summary-value { margin-top: 12px; color: var(--ink); font-size: 27px; font-weight: 700; letter-spacing: -.05em; }
+    .summary-foot { margin-top: 4px; color: #97a3ac; font-size: 10px; }
+    .panel { overflow: hidden; box-shadow: 0 2px 10px rgb(28 48 63 / 3%); }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 20px; border-bottom: 1px solid #e9eef1; }
+    .panel-heading h2 { margin: 0; font-size: 15px; letter-spacing: -.02em; }
+    .panel-heading p { margin: 4px 0 0; color: #87949e; font-size: 11px; }
+    .overview-body { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 28px; padding: 22px 20px; }
+    .overview-metrics { display: grid; gap: 17px; }
+    .overview-metric-heading { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 7px; color: #687b88; font-size: 11px; }
+    .overview-metric-heading strong { color: #394f5e; }
+    .metric-track { height: 7px; overflow: hidden; border-radius: 10px; background: #edf1f3; }
+    .metric-fill { height: 100%; border-radius: inherit; background: #37956a; }
+    .metric-fill.failed { background: #ce5062; }
+    .overview-action { display: grid; justify-items: center; gap: 11px; max-width: 220px; padding: 18px; border: 1px solid #e9eef1; border-radius: 12px; background: #fafcfd; text-align: center; }
+    .overview-action svg { color: var(--red); }
+    .overview-action p { margin: 0; color: #758590; font-size: 11px; line-height: 1.6; }
+    .overview-action .secondary { color: var(--red); border-color: #eed1d6; }
+    .filters { display: flex; flex-wrap: wrap; gap: 9px; padding: 14px 18px; border-bottom: 1px solid #edf0f3; background: #fcfdfd; }
+    .search-field { position: relative; flex: 1 1 220px; }
+    .search-field svg { position: absolute; top: 11px; left: 11px; color: #8796a1; }
+    .filters input, .filters select { width: 100%; height: 37px; padding: 0 10px; border: 1px solid #dfe6eb; border-radius: 7px; outline: none; color: #435968; background: white; font-size: 11px; }
+    .filters input:focus, .filters select:focus { border-color: #9db4c1; box-shadow: 0 0 0 2px rgb(8 124 168 / 8%); }
+    .filters .search-field input { padding-left: 34px; }
+    .date-filter { flex: 0 1 155px; }
+    .status-filter { flex: 0 1 135px; }
+    .filter-button { min-height: 37px; padding: 0 12px; border-color: #dfe6eb; color: #536775; background: white; font-size: 11px; }
+    .filter-button:hover, .secondary:hover { border-color: #c9d4dc; background: #f8fafb; }
+    .secondary { min-height: 37px; padding: 0 12px; border-color: #dfe6eb; color: #455b69; background: white; font-size: 11px; }
+    .export-button { border-color: var(--red); color: white; background: var(--red); }
+    .export-button:hover { border-color: var(--red-dark); color: white; background: var(--red-dark); }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid #edf0f2; text-align: left; font-size: 10.5px; }
+    th { color: #788894; background: #fafbfc; font-size: 10px; font-weight: 650; }
+    td { color: #495e6d; }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #fbfcfd; }
+    td:first-child, th:first-child { padding-left: 19px; }
+    .user-name { color: #31495a; font-weight: 650; }
+    .email-cell { color: #768793; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px; border-radius: 20px; font-size: 9.5px; font-weight: 650; }
+    .badge::before { width: 5px; height: 5px; border-radius: 50%; background: currentColor; content: ""; }
+    .badge-success { color: #218151; background: #edf8f1; }
+    .badge-failed { color: #b63146; background: #fff0f2; }
+    .session-code { color: #82919c; font-family: "SFMono-Regular", Consolas, monospace; font-size: 9.5px; }
+    .table-footer { display: flex; justify-content: space-between; gap: 10px; padding: 12px 19px; border-top: 1px solid #edf0f2; color: #86939d; font-size: 10px; }
+    .admin-note { display: flex; align-items: center; gap: 8px; margin-top: 15px; color: #86949e; font-size: 10px; }
+    .empty { padding: 32px 16px; text-align: center; color: #7d8b95; font-size: 12px; }
+    .login-admin-wrap { display: grid; min-height: calc(100vh - 66px); place-items: start center; padding: 44px 18px; }
+    .admin-login-card { width: min(100%, 410px); padding: 28px; }
+    .admin-login-card h1 { margin: 12px 0 7px; font-size: 23px; letter-spacing: -.04em; }
+    .admin-login-card .subtitle { margin-bottom: 21px; }
+    .admin-info { margin: 15px 0 0; padding: 11px 12px; border: 1px solid #e5ebef; border-radius: 8px; color: #71818d; background: #f8fafb; font-size: 10px; line-height: 1.6; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; padding: 18px; background: rgb(20 35 47 / 35%); backdrop-filter: blur(3px); }
+    .modal { width: min(100%, 390px); padding: 26px; border: 1px solid #e8edf0; border-radius: 15px; background: white; box-shadow: 0 24px 80px rgb(20 35 47 / 22%); }
+    .modal-icon { display: grid; width: 44px; height: 44px; margin-bottom: 15px; place-items: center; border-radius: 12px; color: var(--green); background: var(--green-pale); }
+    .modal h2 { margin-bottom: 7px; font-size: 19px; letter-spacing: -.03em; }
+    .modal p { margin-bottom: 20px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .modal-done { width: auto; min-height: 38px; padding: 0 17px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 10; max-width: calc(100vw - 44px); padding: 11px 15px; border: 1px solid #d5e5da; border-radius: 9px; color: #226746; background: white; box-shadow: var(--shadow); font-size: 11px; }
+
+    @media (max-width: 760px) {
+      .login-shell { padding: 27px 15px 22px; }
+      .brand { margin-bottom: 21px; }
+      .login-layout { grid-template-columns: minmax(0, 460px); gap: 13px; }
+      .login-card { padding: 28px 24px 24px; }
+      .security-card { padding: 19px 19px 16px; }
+      .security-card p { font-size: 11.5px; }
+      .integration { margin-top: 13px; }
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .summary-card { padding: 14px; }
+      .summary-value { font-size: 24px; }
+      .page-title-row { align-items: flex-start; flex-direction: column; }
+      .admin-topbar { min-height: 58px; padding: 0 16px; }
+      .dashboard { padding-top: 23px; }
+    }
+    @media (max-width: 480px) {
+      .topbar-right { gap: 10px; font-size: 10px; }
+      .brand-product { font-size: 10px; }
+      .admin-brand { gap: 9px; }
+      .panel-heading { align-items: flex-start; flex-direction: column; }
+      .panel-heading > div:last-child { display: flex; width: 100%; }
+      .panel-heading > div:last-child .secondary { flex: 1; }
+      .overview-body { grid-template-columns: 1fr; gap: 18px; }
+      .overview-action { width: 100%; max-width: none; }
+      .date-filter { flex: 1 1 125px; }
+      .status-filter { flex: 1 1 110px; }
+      .filter-button { flex: 1 1 auto; }
+      .filters { gap: 7px; padding: 11px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="brand-watermark" aria-hidden="true">
+    <svg viewBox="0 0 240 116" fill="currentColor">
+      <g>
+        <rect x="18" y="16" width="7" height="27" rx="3.5"/><rect x="43" y="7" width="7" height="38" rx="3.5"/>
+        <rect x="68" y="1" width="7" height="47" rx="3.5"/><rect x="93" y="13" width="7" height="32" rx="3.5"/>
+        <rect x="118" y="20" width="7" height="25" rx="3.5"/><rect x="143" y="13" width="7" height="32" rx="3.5"/>
+        <rect x="168" y="1" width="7" height="47" rx="3.5"/><rect x="193" y="7" width="7" height="38" rx="3.5"/>
+        <rect x="218" y="16" width="7" height="27" rx="3.5"/>
+      </g>
+      <text x="120" y="99" text-anchor="middle" font-family="Arial, sans-serif" font-size="39" font-weight="700" letter-spacing="7">cisco</text>
+    </svg>
+  </div>
+  <main id="login-screen" class="screen active">
+    <div class="login-shell">
+      <header class="brand" aria-label="Cisco corporate wireless">
+        <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
+          <g fill="currentColor">
+            <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/>
+            <rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/>
+            <rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/>
+            <rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/>
+            <rect x="107" y="8" width="4" height="15" rx="2"/>
+          </g>
+          <text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+        </svg>
+        <div class="brand-caption">Corporate Wireless Network</div>
+      </header>
+
+      <div class="login-layout">
+        <section class="card login-card" aria-labelledby="login-title">
+          <div class="eyebrow"><span class="eyebrow-dot"></span> Secure network access</div>
+          <h1 id="login-title">Connect to Corporate Wi-Fi</h1>
+          <p class="subtitle">Please sign in using your corporate credentials.</p>
+          <div id="login-status" class="status-box hidden" role="status" aria-live="polite"></div>
+          <form id="wifi-form" autocomplete="off">
+            <div class="field">
+              <label for="username">Username</label>
+              <input id="username" name="username" type="text" placeholder="Enter your username" autocomplete="off" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="Enter your corporate email" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="password">Password</label>
+              <div class="input-wrap">
+                <input id="password" class="password-input" name="password" type="password" placeholder="Enter your password" autocomplete="new-password" required>
+                <button id="password-toggle" class="toggle-password" type="button" aria-label="Show password" title="Show password">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <label class="check-row" for="authorized">
+              <input id="authorized" name="authorized" type="checkbox">
+              <span>I confirm that I am authorized to use this network and agree to the corporate network usage policy.</span>
+            </label>
+            <button id="sign-in" class="primary" type="submit">
+              <span>Sign In &amp; Connect</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </form>
+          <div class="help">Need help? <a href="mailto:helpdesk@cisco.example">Contact the IT Help Desk</a>.</div>
+        </section>
+
+        <aside class="security-card" aria-labelledby="security-title">
+          <div class="warning-heading">
+            <span class="warning-icon">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m10.3 3.9-8 14a2 2 0 0 0 1.7 3h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>
+            </span>
+            <strong id="security-title">AUTHORIZED EMPLOYEES ONLY</strong>
+          </div>
+          <p>This Wi-Fi network is restricted to authorized Cisco employees and approved users.</p>
+          <p>If you are not a Cisco employee or an authorized user, please do not use this Wi-Fi network.</p>
+          <p class="monitoring">Network activity may be monitored and logged in accordance with corporate security policies.</p>
+        </aside>
+      </div>
+
+      <div class="integration">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg>
+        <span><strong>Demo authentication only</strong> &nbsp;The demo login is checked locally and is not connected to Cisco ISE / RADIUS / SSO. Inputs are not transmitted or stored. Use a secure backend integration before deploying a real captive portal.</span>
+      </div>
+      <div class="preview" aria-label="Login state previews">
+        <span>Preview login state:</span>
+        <button type="button" data-state="loading">Loading</button>
+        <button type="button" data-state="success">Success</button>
+        <button type="button" data-state="failed">Failed</button>
+      </div>
+      <footer class="page-footer">Cisco Corporate IT <span aria-hidden="true">·</span> Secure access for authorized users
+        <button id="admin-entry" class="hidden" type="button" data-navigate="admin-login">Administrator interface</button>
+      </footer>
+    </div>
+  </main>
+
+  <main id="connection-screen" class="screen">
+    <div class="connected-shell">
+      <header class="brand" aria-label="Cisco corporate wireless">
+        <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
+          <g fill="currentColor">
+            <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+        </svg>
+        <div class="brand-caption">Corporate Wireless Network</div>
+      </header>
+      <section class="card connected-card" aria-labelledby="connected-title">
+        <span class="connected-icon"><svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span>
+        <div class="eyebrow"><span class="eyebrow-dot" style="background:#19734a"></span> Secure connection established</div>
+        <h1 id="connected-title">Connected to Cisco Wi-Fi</h1>
+        <p class="subtitle">You are now connected to the corporate Wi-Fi network.</p>
+        <div class="connection-detail"><span class="admin-dot"></span>Corporate Wireless Network <span aria-hidden="true">·</span> Connected</div>
+        <button class="secondary" type="button" data-navigate="login">Return to sign-in</button>
+        <button id="connection-admin-entry" class="secondary hidden" style="margin-left:8px" type="button" data-navigate="admin-login">Administrator interface</button>
+      </section>
+      <p class="page-footer">Cisco Corporate IT <span aria-hidden="true">·</span> Demo connection confirmation</p>
+    </div>
+  </main>
+
+  <main id="admin-login-screen" class="screen">
+    <header class="admin-topbar">
+      <div class="admin-brand">
+        <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
+          <g fill="currentColor">
+            <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+        </svg>
+        <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
+      </div>
+      <div class="topbar-right"><span><span class="admin-dot"></span>Secure administrator portal</span><button class="top-link" type="button" data-navigate="login">Back to Wi-Fi login</button></div>
+    </header>
+    <div class="login-admin-wrap">
+      <section class="card admin-login-card" aria-labelledby="admin-login-title">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Administrator access</div>
+        <h1 id="admin-login-title">Sign in to your workspace</h1>
+        <p class="subtitle">Authorized administrators can review wireless authentication activity.</p>
+        <div id="admin-login-error" class="status-box status-failed hidden" role="alert">Administrator sign-in failed. Check your credentials or account permissions.</div>
+        <form id="admin-form" autocomplete="off">
+          <div class="field"><label for="admin-username">Administrator username</label><input id="admin-username" type="text" placeholder="Enter your administrator username" autocomplete="off" required></div>
+          <div class="field"><label for="admin-password">Password</label><input id="admin-password" type="password" placeholder="Enter your password" autocomplete="new-password" required></div>
+          <button class="primary" type="submit">Sign in to administrator portal
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <p class="admin-info">Demo administrator access is restricted to the Ibrahim account. Wi-Fi-only accounts cannot open administrator activity or export audit records. Form input is immediately cleared, never transmitted, and never stored. Production access must be enforced by an authorized identity provider.</p>
+      </section>
+    </div>
+  </main>
+
+  <main id="dashboard-screen" class="screen admin-shell">
+    <header class="admin-topbar">
+      <div class="admin-brand">
+        <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
+          <g fill="currentColor">
+            <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+        </svg>
+        <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
+      </div>
+      <div class="topbar-right"><span><span class="admin-dot"></span>Demo administrator</span><button class="top-link" type="button" data-navigate="login">Sign out</button></div>
+    </header>
+    <div class="dashboard">
+      <div class="crumb"><span>Administrator</span><span aria-hidden="true">/</span><span>Overview</span></div>
+      <div class="page-title-row">
+        <div><div class="eyebrow"><span class="eyebrow-dot"></span> Network security</div><h1>Wireless overview</h1><p>Monitor authentication activity across the corporate wireless network.</p></div>
+        <div class="date-note">Last refreshed <span id="refreshed-at">just now</span></div>
+      </div>
+      <section class="summary-grid" aria-label="Authentication summary">
+        <article class="summary-card"><div class="summary-top"><span class="summary-label">Total Login Attempts</span><span class="summary-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span></div><div id="total-count" class="summary-value">0</div><div class="summary-foot">Authentication events</div></article>
+        <article class="summary-card"><div class="summary-top"><span class="summary-label">Successful Logins</span><span class="summary-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></span></div><div id="success-count" class="summary-value">0</div><div class="summary-foot">Approved connections</div></article>
+        <article class="summary-card"><div class="summary-top"><span class="summary-label">Failed Logins</span><span class="summary-icon red"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg></span></div><div id="failed-count" class="summary-value">0</div><div class="summary-foot">Denied or unsuccessful</div></article>
+        <article class="summary-card"><div class="summary-top"><span class="summary-label">Active Sessions</span><span class="summary-icon amber"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span></div><div id="active-count" class="summary-value">0</div><div class="summary-foot">Currently connected</div></article>
+      </section>
+
+      <section class="panel" aria-labelledby="overview-title">
+        <div class="panel-heading"><div><h2 id="overview-title">Authentication overview</h2><p>Recent sign-in outcomes · Sample data for demonstration only</p></div></div>
+        <div class="overview-body">
+          <div class="overview-metrics">
+            <div><div class="overview-metric-heading"><span>Successful logins</span><strong>7 of 10 · 70%</strong></div><div class="metric-track"><div class="metric-fill" style="width:70%"></div></div></div>
+            <div><div class="overview-metric-heading"><span>Failed logins</span><strong>3 of 10 · 30%</strong></div><div class="metric-track"><div class="metric-fill failed" style="width:30%"></div></div></div>
+          </div>
+          <div class="overview-action">
+            <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h4"/></svg>
+            <p>Review individual authentication events and audit details.</p>
+            <button class="secondary" type="button" data-navigate="activity">View login activity</button>
+          </div>
+        </div>
+      </section>
+      <p class="admin-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Prototype access only · Production dashboards should enforce administrator authorization through your identity provider.</p>
+    </div>
+  </main>
+
+  <main id="activity-screen" class="screen admin-shell">
+    <header class="admin-topbar">
+      <div class="admin-brand">
+        <svg class="brand-mark" viewBox="0 0 120 54" role="img" aria-label="Cisco">
+          <g fill="currentColor">
+            <rect x="11" y="8" width="4" height="15" rx="2"/><rect x="23" y="3" width="4" height="22" rx="2"/><rect x="35" y="0" width="4" height="27" rx="2"/><rect x="47" y="7" width="4" height="18" rx="2"/><rect x="59" y="11" width="4" height="14" rx="2"/><rect x="71" y="7" width="4" height="18" rx="2"/><rect x="83" y="0" width="4" height="27" rx="2"/><rect x="95" y="3" width="4" height="22" rx="2"/><rect x="107" y="8" width="4" height="15" rx="2"/>
+          </g><text x="60" y="48" text-anchor="middle" fill="currentColor" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="3">cisco</text>
+        </svg>
+        <span class="brand-divider"></span><span class="brand-product">Wireless administration</span>
+      </div>
+      <div class="topbar-right"><span><span class="admin-dot"></span>Demo administrator</span><button class="top-link" type="button" data-navigate="login">Sign out</button></div>
+    </header>
+    <div class="dashboard">
+      <div class="crumb"><button type="button" data-navigate="dashboard">Overview</button><span aria-hidden="true">/</span><span>Login activity</span></div>
+      <div class="page-title-row">
+        <div><div class="eyebrow"><span class="eyebrow-dot"></span> Network security</div><h1>Administrator Login Activity</h1><p>Monitor authentication events across the corporate wireless network.</p></div>
+        <div class="date-note">Last refreshed <span id="activity-refreshed-at">just now</span></div>
+      </div>
+      <section class="panel" aria-labelledby="activity-title">
+        <div class="panel-heading">
+          <div><h2 id="activity-title">Login activity</h2><p>Recent authentication events · Sample data for demonstration only</p></div>
+          <div>
+            <button id="refresh-button" class="secondary" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9a7 7 0 0 1 11.6-2L20 12M4 12l2.8 5a7 7 0 0 0 11.6-2"/></svg>Refresh
+            </button>
+            <button id="export-button" class="secondary export-button" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 20h14"/></svg>Export Ibrahim's Logs
+            </button>
+          </div>
+        </div>
+        <div class="filters">
+          <div class="search-field">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="search-input" type="search" placeholder="Search username, email, IP or session" aria-label="Search login activity">
+          </div>
+          <p style="margin:0;padding:9px 18px;border-bottom:1px solid #edf0f3;color:#768793;font-size:10px">Excel exports include only successful or failed login records for username <strong>ibrahim</strong>.</p>
+          <div class="date-filter"><input id="date-filter" type="date" aria-label="Filter by date"></div>
+          <div class="status-filter"><select id="status-filter" aria-label="Filter by status"><option value="">All statuses</option><option value="Success">Success</option><option value="Failed">Failed</option></select></div>
+          <button id="clear-filters" class="filter-button" type="button">Clear filters</button>
+        </div>
+        <div class="table-wrap">
+          <table aria-label="Login activity audit log">
+            <thead><tr><th>Date</th><th>Time</th><th>Username</th><th>Email</th><th>IP Address</th><th>Device</th><th>Authentication Status</th><th>Session ID</th></tr></thead>
+            <tbody id="activity-body"></tbody>
+          </table>
+          <div id="empty-state" class="empty hidden">No activity matches your filters.</div>
+        </div>
+        <div class="table-footer"><span id="result-count">Showing 0 activity records</span><span>Audit records contain no passwords</span></div>
+      </section>
+      <p class="admin-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Prototype access only · Production dashboards should enforce administrator authorization through your identity provider.</p>
+    </div>
+  </main>
+
+  <div id="export-modal" class="modal-backdrop hidden" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="export-title">
+      <div class="modal-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></div>
+      <h2 id="export-title">Audit report exported</h2>
+      <p id="export-description">Your Excel-compatible report is ready. It contains audit fields only and does not include passwords.</p>
+      <div class="modal-actions"><button id="modal-close" class="primary modal-done" type="button">Done</button></div>
+    </section>
+  </div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const records = [
+        { date: "2026-10-07", time: "14:32:18", username: "alex.morgan", email: "alex.morgan@cisco.example", ip: "192.0.2.41", device: "MacBook Pro · macOS", status: "Success", session: "WIFI-7F2A91" },
+        { date: "2026-10-07", time: "14:28:06", username: "sam.lee", email: "sam.lee@cisco.example", ip: "192.0.2.87", device: "iPhone 16 · iOS", status: "Success", session: "WIFI-5D8C30" },
+        { date: "2026-10-07", time: "14:21:43", username: "jordan.patel", email: "jordan.patel@cisco.example", ip: "192.0.2.112", device: "ThinkPad X1 · Windows", status: "Failed", session: "—" },
+        { date: "2026-10-07", time: "14:16:05", username: "taylor.chen", email: "taylor.chen@cisco.example", ip: "192.0.2.56", device: "MacBook Air · macOS", status: "Success", session: "WIFI-9A1B47" },
+        { date: "2026-10-07", time: "14:08:39", username: "casey.rivera", email: "casey.rivera@cisco.example", ip: "192.0.2.139", device: "Pixel 9 · Android", status: "Failed", session: "—" },
+        { date: "2026-10-07", time: "13:54:12", username: "riley.kim", email: "riley.kim@cisco.example", ip: "192.0.2.24", device: "Dell XPS 15 · Windows", status: "Success", session: "WIFI-2C6E84" },
+        { date: "2026-10-06", time: "17:42:51", username: "morgan.ellis", email: "morgan.ellis@cisco.example", ip: "192.0.2.73", device: "iPad Pro · iPadOS", status: "Success", session: "WIFI-4D3F11" },
+        { date: "2026-10-06", time: "16:19:27", username: "avery.wong", email: "avery.wong@cisco.example", ip: "192.0.2.98", device: "ThinkPad X1 · Windows", status: "Failed", session: "—" },
+        { date: "2026-10-06", time: "15:07:04", username: "devon.brooks", email: "devon.brooks@cisco.example", ip: "192.0.2.66", device: "MacBook Pro · macOS", status: "Success", session: "WIFI-6B8A52" },
+        { date: "2026-10-06", time: "09:33:16", username: "quinn.foster", email: "quinn.foster@cisco.example", ip: "192.0.2.155", device: "iPhone 16 · iOS", status: "Success", session: "WIFI-8E0C23" }
+      ];
+      const demoSessions = new Set();
+      let currentDemoRole = "guest";
+      const screens = ["login-screen", "connection-screen", "admin-login-screen", "dashboard-screen", "activity-screen"];
+      const statusBox = document.getElementById("login-status");
+      const loginForm = document.getElementById("wifi-form");
+      const fields = ["username", "email", "password"].map((id) => document.getElementById(id));
+      const statusCopy = {
+        loading: { className: "status-loading", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>', title: "Authenticating...", body: "Connecting securely to the corporate authentication service." },
+        success: { className: "status-success", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>', title: "Authentication successful.", body: "You are now connected to the corporate Wi-Fi network." },
+        failed: { className: "status-failed", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg>', title: "Authentication failed.", body: "Please check your credentials and try again." },
+        unavailable: { className: "status-failed", icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m18 6-12 12M6 6l12 12"/></svg>', title: "Secure demo verification unavailable.", body: "Open this prototype in a modern browser over localhost and try again." }
+      };
+
+      function showScreen(id) {
+        screens.forEach((screenId) => document.getElementById(screenId).classList.toggle("active", screenId === id));
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function showLoginState(state) {
+        const content = statusCopy[state];
+        if (!content) return;
+        statusBox.className = "status-box " + content.className;
+        statusBox.innerHTML = content.icon + "<span><strong>" + content.title + "</strong>" + content.body + "</span>";
+      }
+
+      function clearLoginState() {
+        statusBox.className = "status-box hidden";
+        statusBox.textContent = "";
+      }
+
+      function recordDemoLogin(username, email) {
+        const now = new Date();
+        const date = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+        const sessionId = "WIFI-" + Array.from(globalThis.crypto.getRandomValues(new Uint8Array(4)), (byte) => byte.toString(16).padStart(2, "0")).join("").toUpperCase();
+        records.unshift({
+          date,
+          time: [now.getHours(), now.getMinutes(), now.getSeconds()].map((part) => String(part).padStart(2, "0")).join(":"),
+          username,
+          email: email || "—",
+          ip: "Demo only",
+          device: "Browser · demo",
+          status: "Success",
+          session: sessionId
+        });
+        demoSessions.add(sessionId);
+        renderActivity();
+      }
+
+      document.getElementById("password-toggle").addEventListener("click", (event) => {
+        const button = event.currentTarget;
+        const password = document.getElementById("password");
+        const visible = password.type === "password";
+        password.type = visible ? "text" : "password";
+        button.setAttribute("aria-label", visible ? "Hide password" : "Show password");
+        button.setAttribute("title", visible ? "Hide password" : "Show password");
+      });
+
+      loginForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = fields[0].value.trim().toLowerCase();
+        const email = fields[1].value.trim().toLowerCase();
+        const password = fields[2].value;
+        fields.forEach((field) => { field.value = ""; });
+        document.getElementById("authorized").checked = false;
+        showLoginState("loading");
+        const button = document.getElementById("sign-in");
+        button.disabled = true;
+        if (!globalThis.crypto || !globalThis.crypto.subtle) {
+          showLoginState("unavailable");
+          button.disabled = false;
+          return;
+        }
+        try {
+          const digest = await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password));
+          const passwordHash = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+          const demoAccounts = {
+            ibrahim: { passwordHash: "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92", role: "admin" },
+            selim: { passwordHash: "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92", role: "wifi" }
+          };
+          const account = demoAccounts[username];
+          if (account && passwordHash === account.passwordHash) {
+            await new Promise((resolve) => window.setTimeout(resolve, 450));
+            currentDemoRole = account.role;
+            document.getElementById("admin-entry").classList.toggle("hidden", currentDemoRole !== "admin");
+            document.getElementById("connection-admin-entry").classList.toggle("hidden", currentDemoRole !== "admin");
+            recordDemoLogin(username, email);
+            clearLoginState();
+            showScreen("connection-screen");
+          } else {
+            showLoginState("failed");
+          }
+        } catch (error) {
+          showLoginState("unavailable");
+          console.error("Could not verify demo credentials.", error);
+        } finally {
+          button.disabled = false;
+        }
+      });
+
+      document.querySelectorAll("[data-state]").forEach((button) => {
+        button.addEventListener("click", () => {
+          fields.forEach((field) => { field.value = ""; });
+          document.getElementById("authorized").checked = false;
+          showLoginState(button.dataset.state);
+        });
+      });
+
+      document.querySelectorAll("[data-navigate]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.dataset.navigate === "login") {
+            currentDemoRole = "guest";
+            document.getElementById("admin-entry").classList.add("hidden");
+            document.getElementById("connection-admin-entry").classList.add("hidden");
+            clearLoginState();
+            showScreen("login-screen");
+          } else if (button.dataset.navigate === "connection") {
+            showScreen("connection-screen");
+          } else if (button.dataset.navigate === "admin-login") {
+            if (currentDemoRole === "admin") {
+              document.getElementById("admin-login-error").classList.add("hidden");
+              showScreen("admin-login-screen");
+            } else {
+              showToast("Administrator access is limited to the Ibrahim demo account.");
+            }
+          } else if (button.dataset.navigate === "dashboard") {
+            if (currentDemoRole === "admin") showScreen("dashboard-screen");
+            else showScreen("login-screen");
+          } else if (button.dataset.navigate === "activity") {
+            if (currentDemoRole === "admin") {
+              renderActivity();
+              showScreen("activity-screen");
+            } else {
+              showScreen("login-screen");
+            }
+          }
+        });
+      });
+
+      document.getElementById("admin-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const username = document.getElementById("admin-username").value.trim().toLowerCase();
+        const password = document.getElementById("admin-password").value;
+        document.getElementById("admin-username").value = "";
+        document.getElementById("admin-password").value = "";
+        const error = document.getElementById("admin-login-error");
+        if (!globalThis.crypto || !globalThis.crypto.subtle) {
+          error.textContent = "Secure administrator verification is unavailable in this browser.";
+          error.classList.remove("hidden");
+          return;
+        }
+        try {
+          const digest = await globalThis.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password));
+          const passwordHash = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+          if (currentDemoRole !== "admin" || username !== "ibrahim" || passwordHash !== "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92") {
+            error.textContent = "Administrator sign-in failed. Check your credentials or account permissions.";
+            error.classList.remove("hidden");
+            return;
+          }
+          error.classList.add("hidden");
+          renderActivity();
+          showScreen("dashboard-screen");
+        } catch (verificationError) {
+          error.textContent = "Secure administrator verification failed. Please try again.";
+          error.classList.remove("hidden");
+          console.error("Could not verify demo administrator credentials.", verificationError);
+        }
+      });
+
+      const search = document.getElementById("search-input");
+      const date = document.getElementById("date-filter");
+      const status = document.getElementById("status-filter");
+
+      function renderActivity() {
+        const query = search.value.trim().toLowerCase();
+        const filtered = records.filter((record) => {
+          const searchable = [record.username, record.email, record.ip, record.device, record.session].join(" ").toLowerCase();
+          return (!query || searchable.includes(query)) &&
+            (!date.value || record.date === date.value) &&
+            (!status.value || record.status === status.value);
+        }).sort((a, b) => (b.date + " " + b.time).localeCompare(a.date + " " + a.time));
+        const body = document.getElementById("activity-body");
+        body.innerHTML = filtered.map((record) => {
+          const badgeClass = record.status === "Success" ? "badge-success" : "badge-failed";
+          const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (character) => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+          })[character]);
+          return "<tr><td>" + record.date + "</td><td>" + record.time + "</td><td class=\"user-name\">" + escapeHtml(record.username) + "</td><td class=\"email-cell\">" + escapeHtml(record.email) + "</td><td>" + escapeHtml(record.ip) + "</td><td>" + escapeHtml(record.device) + "</td><td><span class=\"badge " + badgeClass + "\">" + record.status + "</span></td><td class=\"session-code\">" + escapeHtml(record.session) + "</td></tr>";
+        }).join("");
+        document.getElementById("empty-state").classList.toggle("hidden", filtered.length !== 0);
+        document.getElementById("result-count").textContent = "Showing " + filtered.length + " of " + records.length + " activity records";
+        document.getElementById("total-count").textContent = records.length;
+        document.getElementById("success-count").textContent = records.filter((record) => record.status === "Success").length;
+        document.getElementById("failed-count").textContent = records.filter((record) => record.status === "Failed").length;
+        const today = new Date();
+        const todayKey = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
+        const demoActiveCount = Array.from(demoSessions).filter((sessionId) => records.some((record) => record.session === sessionId && record.date === todayKey)).length;
+        document.getElementById("active-count").textContent = records.filter((record) => record.status === "Success" && record.date === "2026-10-07" && !demoSessions.has(record.session)).length + demoActiveCount;
+      }
+
+      [search, date, status].forEach((control) => control.addEventListener("input", renderActivity));
+      document.getElementById("clear-filters").addEventListener("click", () => {
+        search.value = "";
+        date.value = "";
+        status.value = "";
+        renderActivity();
+      });
+      document.getElementById("refresh-button").addEventListener("click", () => {
+        renderActivity();
+        const time = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date());
+        document.getElementById("refreshed-at").textContent = time;
+        document.getElementById("activity-refreshed-at").textContent = time;
+        showToast("Activity refreshed. Showing demonstration data.");
+      });
+
+      function csvCell(value) {
+        const text = String(value);
+        const safe = text.replace(/"/g, '""');
+        return (/^[\t\r ]*[=+\-@]/.test(text) ? "\"'" + safe + "\"" : '"' + safe + '"');
+      }
+
+      document.getElementById("export-button").addEventListener("click", () => {
+        const query = search.value.trim().toLowerCase();
+        const filtered = records.filter((record) => {
+          const searchable = [record.username, record.email, record.ip, record.device, record.session].join(" ").toLowerCase();
+          return record.username === "ibrahim" &&
+            (!query || searchable.includes(query)) &&
+            (!date.value || record.date === date.value) &&
+            (!status.value || record.status === status.value);
+        });
+        const columns = [
+          ["Date", "date"], ["Time", "time"], ["Username", "username"], ["Email", "email"],
+          ["IP Address", "ip"], ["Device", "device"], ["Authentication Status", "status"], ["Session ID", "session"]
+        ];
+        const csv = "\uFEFF" + [columns.map(([label]) => csvCell(label)).join(","), ...filtered.map((record) => columns.map(([, key]) => csvCell(record[key])).join(","))].join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "ibrahim-wireless-login-activity.csv";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        document.getElementById("export-description").textContent = "Your Excel-compatible report contains " + filtered.length + " audit records for username Ibrahim only, with date, time, email, IP address, device, result and session ID. No passwords are included.";
+        document.getElementById("export-modal").classList.remove("hidden");
+        document.getElementById("modal-close").focus();
+      });
+
+      document.getElementById("modal-close").addEventListener("click", () => {
+        document.getElementById("export-modal").classList.add("hidden");
+      });
+      document.getElementById("export-modal").addEventListener("click", (event) => {
+        if (event.target === event.currentTarget) event.currentTarget.classList.add("hidden");
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") document.getElementById("export-modal").classList.add("hidden");
+      });
+
+      let toastTimer;
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.remove("hidden");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.add("hidden"), 2800);
+      }
+      renderActivity();
+    })();
+  </script>
+</body>
+</html>
